@@ -36,9 +36,9 @@ function UMLogoFull({style}: {style?: React.CSSProperties}){
   );
 }
 
-// ── Shared storage (localStorage) ─────────────────────────────────────────
-const sg=async(k: string)=>{try{const r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch{return null;}};
-const ss=async(k: string,v: unknown)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}};
+// ── Shared storage (server-side — syncs across all devices) ───────────────
+const sg=async(k: string)=>{try{const r=await fetch('/api/store/'+k);const d=await r.json();return d.value?JSON.parse(d.value):null;}catch{return null;}};
+const ss=async(k: string,v: unknown)=>{try{await fetch('/api/store/'+k,{method:'PUT',headers:{'Content-Type':'text/plain'},body:JSON.stringify(v)});}catch{}};
 
 // ── Shopify CSV parser ─────────────────────────────────────────────────────
 function _csvRows(txt: string){
