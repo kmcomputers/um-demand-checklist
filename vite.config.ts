@@ -13,7 +13,7 @@ export default defineConfig({
         short_name: 'UM Demand',
         description: 'United Merch fulfillment demand, print, and pack checklist',
         theme_color: '#2c2d71',
-        background_color: '#2c2d71',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
