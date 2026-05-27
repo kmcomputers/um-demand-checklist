@@ -6,8 +6,22 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '10mb' }));
 
-// ── Shared in-memory store (cross-device sync) ─────────────────────────────
-const store = {};
+// ── Persistent store (Railway volume at /data) ─────────────────────────────
+const fs = require('fs');
+const STORE_FILE = process.env.STORE_PATH || '/data/store.json';
+
+function loadStore() {
+  try { return JSON.parse(fs.readFileSync(STORE_FILE, 'utf8')); } catch { return {}; }
+}
+function saveStore(s) {
+  try {
+    fs.mkdirSync(path.dirname(STORE_FILE), { recursive: true });
+    fs.writeFileSync(STORE_FILE, JSON.stringify(s));
+  } catch (e) { console.error('Store write failed:', e.message); }
+}
+
+const store = loadStore();
+console.log(`Store loaded from ${STORE_FILE} (${Object.keys(store).length} keys)`);
 
 app.get('/api/store/:key', (req, res) => {
   const val = store[req.params.key];
@@ -16,6 +30,7 @@ app.get('/api/store/:key', (req, res) => {
 
 app.put('/api/store/:key', express.text({ limit: '10mb', type: '*/*' }), (req, res) => {
   store[req.params.key] = req.body;
+  saveStore(store);
   res.json({ ok: true });
 });
 
