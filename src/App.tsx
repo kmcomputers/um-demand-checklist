@@ -286,6 +286,7 @@ function InputScreen({iVal,setIVal,onSubmit,onSample,onSync,err,hasExisting,onRe
   const [dragging,setDragging]=useState(false);
   const [droppedName,setDroppedName]=useState("");
   const [showInstr,setShowInstr]=useState(false);
+  const [showMore,setShowMore]=useState(false);
 
   const handleFile=function(file: File){
     if(!file)return;
@@ -344,7 +345,12 @@ function InputScreen({iVal,setIVal,onSubmit,onSample,onSync,err,hasExisting,onRe
           <button onClick={onSubmit} disabled={!canSubmit} style={{width:"100%",padding:"12px",background:canSubmit?RED:"#ccc",color:"#fff",border:"none",borderRadius:6,fontSize:14,fontFamily:"Oswald,sans-serif",fontWeight:700,letterSpacing:1,textTransform:"uppercase",cursor:canSubmit?"pointer":"default",marginBottom:8}}>
             {droppedImage?(droppedImage.isPdf?"Parse PDF":"Parse Screenshot"):"Parse Orders"}
           </button>
-          <button onClick={onSample} style={{width:"100%",padding:"9px",background:"#fff",color:BLU,border:"1px solid "+BLU,borderRadius:6,fontSize:12,fontFamily:"Roboto,sans-serif",cursor:"pointer"}}>Load Sample Data</button>
+          <div style={{textAlign:"center",marginTop:4}}>
+            <button onClick={()=>setShowMore(!showMore)} style={{background:"none",border:"none",color:"#bbb",fontSize:11,cursor:"pointer",padding:"4px 8px",letterSpacing:.3}}>
+              {showMore?"▲ less":"··· more options"}
+            </button>
+            {showMore&&<button onClick={onSample} style={{display:"block",width:"100%",marginTop:6,padding:"9px",background:"#fff",color:"#888",border:"1px solid #ddd",borderRadius:6,fontSize:12,fontFamily:"Roboto,sans-serif",cursor:"pointer"}}>Load Sample Data</button>}
+          </div>
         </div>
       </div>
     </div>
